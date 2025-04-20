@@ -1,12 +1,10 @@
+import { RouterProvider } from 'react-router'
 import './App.css'
-
+import router from './router'
 function App() {
 
-  return (
-    <h1 class="text-3xl font-bold underline">
-      Hello world!
-    </h1>
-  )
+  return <RouterProvider router={router} />
+
 }
 
 export default App
