@@ -33,7 +33,7 @@ const CreateBlog = () => {
           onChange={(e) => setTitle(e.target.value)}
         />
         <Editor
-          apiKey="your-tinymce-api-key" // Optional if you're using TinyMCE Cloud
+          apiKey="t9efgvxeypkl6u9pp2mqflniqoao020rf2asbgcbpesdvb40" // Optional if you're using TinyMCE Cloud
           value={content}
           init={{
             height: 300,

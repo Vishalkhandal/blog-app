@@ -1,0 +1,358 @@
+
+// layouts/AdminLayout.jsx
+import React from "react";
+import { Outlet, Link } from "react-router-dom";
+
+const AdminLayout = () => {
+  return (
+    <div className="flex min-h-screen">
+      <aside className="w-64 bg-gray-800 text-white p-4">
+        <h2 className="text-xl font-bold mb-4">Admin Panel</h2>
+        <nav className="flex flex-col space-y-2">
+          <Link to="/admin/dashboard" className="hover:text-yellow-300">Dashboard</Link>
+          <Link to="/admin/create" className="hover:text-yellow-300">Create Blog</Link>
+        </nav>
+      </aside>
+      <main className="flex-1 bg-gray-100 p-6">
+        <Outlet />
+      </main>
+    </div>
+  );
+};
+
+export default AdminLayout;
+
+
+// pages/Dashboard.jsx
+import React from "react";
+import { useSelector } from "react-redux";
+import { Link } from "react-router-dom";
+
+const Dashboard = () => {
+  const blogs = useSelector((state) => state.blogs.items);
+
+  return (
+    <div>
+      <h1 className="text-2xl font-bold mb-6">Blog Dashboard</h1>
+      <ul className="space-y-4">
+        {blogs.map((blog) => (
+          <li key={blog.id} className="p-4 bg-white rounded shadow">
+            <h2 className="text-xl font-semibold">{blog.title}</h2>
+            <p className="text-sm text-gray-600">{blog.author}</p>
+            <Link
+              to={`/admin/edit/${blog.id}`}
+              className="text-blue-500 hover:underline text-sm mt-2 inline-block"
+            >
+              Edit Blog
+            </Link>
+          </li>
+        ))}
+      </ul>
+    </div>
+  );
+};
+
+export default Dashboard;
+
+
+ 
+  },
+]);
+
+export default router;
+
+
+// store/index.js
+import { configureStore } from "@reduxjs/toolkit";
+import authReducer from "../features/auth/authSlice";
+import blogReducer from "../features/blogs/blogSlice";
+
+const store = configureStore({
+  reducer: {
+    auth: authReducer,
+    blogs: blogReducer,
+  },
+});
+
+export default store;
+
+
+// services/axios.js
+import axios from "axios";
+
+const api = axios.create({
+  baseURL: "https://yourapi.com/api",
+});
+
+// Add interceptors if needed
+export default api;
+
+
+// layouts/MainLayout.jsx
+import React from "react";
+import { Outlet } from "react-router-dom";
+import Header from "../components/Header";
+import Footer from "../components/Footer";
+
+const MainLayout = () => {
+  return (
+    <div className="flex flex-col min-h-screen">
+      <Header />
+      <main className="flex-1 container mx-auto px-4 py-6">
+        <Outlet />
+      </main>
+      <Footer />
+    </div>
+  );
+};
+
+export default MainLayout;
+
+
+// layouts/AdminLayout.jsx
+import React from "react";
+import { Outlet, Link } from "react-router-dom";
+
+const AdminLayout = () => {
+  return (
+    <div className="flex min-h-screen">
+      <aside className="w-64 bg-gray-800 text-white p-4">
+        <h2 className="text-xl font-bold mb-4">Admin Panel</h2>
+        <nav className="flex flex-col space-y-2">
+          <Link to="/admin/dashboard" className="hover:text-yellow-300">Dashboard</Link>
+          <Link to="/admin/create" className="hover:text-yellow-300">Create Blog</Link>
+          <Link to="/admin/blogs" className="hover:text-yellow-300">All Blogs</Link>
+        </nav>
+      </aside>
+      <main className="flex-1 bg-gray-100 p-6">
+        <Outlet />
+      </main>
+    </div>
+  );
+};
+
+export default AdminLayout;
+
+
+// pages/Dashboard.jsx
+import React from "react";
+import { useSelector } from "react-redux";
+import { Link } from "react-router-dom";
+
+const Dashboard = () => {
+  const blogs = useSelector((state) => state.blogs.items);
+
+  return (
+    <div>
+      <h1 className="text-2xl font-bold mb-6">Blog Dashboard</h1>
+      <ul className="space-y-4">
+        {blogs.map((blog) => (
+          <li key={blog.id} className="p-4 bg-white rounded shadow">
+            <h2 className="text-xl font-semibold">{blog.title}</h2>
+            <p className="text-sm text-gray-600">{blog.author}</p>
+            <Link
+              to={`/admin/edit/${blog.id}`}
+              className="text-blue-500 hover:underline text-sm mt-2 inline-block"
+            >
+              Edit Blog
+            </Link>
+          </li>
+        ))}
+      </ul>
+    </div>
+  );
+};
+
+export default Dashboard;
+
+
+// pages/CreateBlog.jsx
+import React, { useState } from "react";
+import { useDispatch } from "react-redux";
+import { createBlog } from "../features/blogs/blogSlice";
+import ReactQuill from "react-quill";
+import "react-quill/dist/quill.snow.css";
+
+const CreateBlog = () => {
+  const dispatch = useDispatch();
+  const [title, setTitle] = useState("");
+  const [content, setContent] = useState("");
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    dispatch(createBlog({ title, content }));
+    setTitle("");
+    setContent("");
+  };
+
+  return (
+    <div className="max-w-3xl mx-auto">
+      <h1 className="text-2xl font-bold mb-4">Create New Blog</h1>
+      <form onSubmit={handleSubmit} className="space-y-4">
+        
+        <input
+          type="text"
+          className="w-full border px-3 py-2 rounded"
+          placeholder="Title"
+          value={title}
+          onChange={(e) => setTitle(e.target.value)}
+        />
+        <ReactQuill theme="snow" value={content} onChange={setContent} />
+        <button type="submit" className="bg-blue-600 text-white px-4 py-2 rounded">
+          Publish
+        </button>
+      </form>
+    </div>
+  );
+};
+
+export default CreateBlog;
+
+
+// pages/ShowBlogs.jsx
+import React from "react";
+import { useSelector } from "react-redux";
+import { Link } from "react-router-dom";
+
+const ShowBlogs = () => {
+  const blogs = useSelector((state) => state.blogs.items);
+
+  return (
+    <div>
+      <h1 className="text-2xl font-bold mb-6">All Blogs</h1>
+      <table className="w-full border">
+        <thead>
+          <tr className="bg-gray-200 text-left">
+            <th className="p-2">Title</th>
+            <th className="p-2">Author</th>
+            <th className="p-2">Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          {blogs.map((blog) => (
+            <tr key={blog.id} className="border-t">
+              <td className="p-2">{blog.title}</td>
+              <td className="p-2">{blog.author}</td>
+              <td className="p-2 space-x-2">
+                <Link
+                  to={`/admin/edit/${blog.id}`}
+                  className="text-blue-600 hover:underline"
+                >
+                  Edit
+                </Link>
+                <button className="text-red-500 hover:underline">Delete</button>
+              </td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
+  );
+};
+
+export default ShowBlogs;
+
+
+
+
++++++++++++++++++++++++++++++++++++++
+// pages/CreateBlog.jsx
+import React, { useState } from "react";
+import { useDispatch } from "react-redux";
+import { createBlog } from "../features/blogs/blogSlice";
+import { Editor } from "@tinymce/tinymce-react";
+
+const CreateBlog = () => {
+  const dispatch = useDispatch();
+  const [title, setTitle] = useState("");
+  const [content, setContent] = useState("");
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    dispatch(createBlog({ title, content }));
+    setTitle("");
+    setContent("");
+  };
+
+  return (
+    <div className="max-w-3xl mx-auto">
+      <h1 className="text-2xl font-bold mb-4">Create New Blog</h1>
+      <form onSubmit={handleSubmit} className="space-y-4">
+        <input
+          type="text"
+          className="w-full border px-3 py-2 rounded"
+          placeholder="Title"
+          value={title}
+          onChange={(e) => setTitle(e.target.value)}
+        />
+        <Editor
+          apiKey="your-tinymce-api-key" // Optional if you're using TinyMCE Cloud
+          value={content}
+          init={{
+            height: 300,
+            menubar: false,
+            plugins: [
+              "advlist autolink lists link image charmap print preview anchor",
+              "searchreplace visualblocks code fullscreen",
+              "insertdatetime media table paste code help wordcount",
+            ],
+            toolbar:
+              "undo redo | formatselect | bold italic backcolor | \
+              alignleft aligncenter alignright alignjustify | \
+              bullist numlist outdent indent | removeformat | help",
+          }}
+          onEditorChange={(newContent) => setContent(newContent)}
+        />
+        <button type="submit" className="bg-blue-600 text-white px-4 py-2 rounded">
+          Publish
+        </button>
+      </form>
+    </div>
+  );
+};
+
+export default CreateBlog;
+
+
+// pages/ShowBlogs.jsx
+import React from "react";
+import { useSelector } from "react-redux";
+import { Link } from "react-router-dom";
+
+const ShowBlogs = () => {
+  const blogs = useSelector((state) => state.blogs.items);
+
+  return (
+    <div>
+      <h1 className="text-2xl font-bold mb-6">All Blogs</h1>
+      <table className="w-full border">
+        <thead>
+          <tr className="bg-gray-200 text-left">
+            <th className="p-2">Title</th>
+            <th className="p-2">Author</th>
+            <th className="p-2">Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          {blogs.map((blog) => (
+            <tr key={blog.id} className="border-t">
+              <td className="p-2">{blog.title}</td>
+              <td className="p-2">{blog.author}</td>
+              <td className="p-2 space-x-2">
+                <Link
+                  to={`/admin/edit/${blog.id}`}
+                  className="text-blue-600 hover:underline"
+                >
+                  Edit
+                </Link>
+                <button className="text-red-500 hover:underline">Delete</button>
+              </td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
+  );
+};
+
+export default ShowBlogs;

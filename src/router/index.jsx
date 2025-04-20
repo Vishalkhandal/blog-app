@@ -8,9 +8,9 @@ import Dashboard from "../pages/Dashboard";
 import CreateBlog from "../pages/CreateBlog";
 import EditBlog from "../pages/EditBlog";
 import BlogDetails from "../pages/BlogDetails";
-import Login from "../pages/Login";
+import Login from "../pages/LoginForm";
 import AuthLayout from "../layouts/AuthLayout";
-import Register from "../pages/Register";
+import Register from "../pages/RegisterForm";
 import ShowBlogs from "../pages/ShowBlogs";
 
 const router = createBrowserRouter([
