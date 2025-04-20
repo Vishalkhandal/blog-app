@@ -11,6 +11,7 @@ import BlogDetails from "../pages/BlogDetails";
 import Login from "../pages/Login";
 import AuthLayout from "../layouts/AuthLayout";
 import Register from "../pages/Register";
+import ShowBlogs from "../pages/ShowBlogs";
 
 const router = createBrowserRouter([
     {
@@ -34,7 +35,8 @@ const router = createBrowserRouter([
         children: [
             { index: true, element: <Dashboard /> },
             { path: "create", element: <CreateBlog /> },
-            { path: "edit/:id", element: <EditBlog /> }
+            { path: "edit/:id", element: <EditBlog /> },
+            { path: "posts", element: <ShowBlogs /> }
         ]
     },
 
