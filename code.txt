@@ -23,6 +23,30 @@ const AdminLayout = () => {
 export default AdminLayout;
 
 
+
+<div class="divide-x-thin mt-5 grid grid-cols-4 gap-5 divide-[rgba(18,18,18,0.16)]">
+  <div class="flex w-full pl-5">
+    <div class="w-full">
+      <div class="aspect-h-9 aspect-w-16">
+        <img alt="carole_cadwalladr_this_is_what_a_digital_coup_looks_like" loading="lazy" decoding="async" data-nimg="fill" class="object-cover object-top" sizes="(min-width: 1920px) 33vw, (min-width: 1024px) 50vw, (min-width: 768px) 66vw, 100vw" src="https://pi.tedcdn.com/r/talkstar-assets.s3.amazonaws.com/production/talks/talk_148289/f238a9b3-82fc-41ab-8e55-26179003028c/CaroleCadwalladr_2025-embed.jpg?u%5Br%5D=2&amp;u%5Bs%5D=0.5&amp;u%5Ba%5D=0.8&amp;u%5Bt%5D=0.03&amp;quality=80&amp;w=3840" style="height: 100%; width: 100%; inset: 0px; color: transparent;" />
+      </div>
+      <div>
+        <div class="mt-3 mb-2">
+          <a class="relative" href="#"><p class="font-semibold uppercase" dir="ltr" style="color: rgb(235, 0, 40);">politics</p></a>
+        </div>
+        <a class="relative" href="/talks/carole_cadwalladr_this_is_what_a_digital_coup_looks_like">
+          <h3 class="text-xl font-semibold" dir="ltr">This is what a digital coup looks like</h3>
+          <p class="mt-2 font-normal">July 2, 2006</p>
+          <p class="mt-2" dir="ltr">Lorem ipsum dolor sit amet consectetur adipisicing elit. Sed temporibus totam perferendis inventore qui amet?</p>
+          <p class="mt-2 font-normal text-[#767676]" dir="ltr">Carole Cadwalladr</p>
+        </a>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
 // pages/Dashboard.jsx
 import React from "react";
 import { useSelector } from "react-redux";

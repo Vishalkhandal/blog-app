@@ -13,11 +13,13 @@ import { Editor } from "@tinymce/tinymce-react";
 
 const CreateBlog = () => {
   const [title, setTitle] = useState("");
+  const [author, setAuthor] = useState("");
   const [content, setContent] = useState("");
 
   const handleSubmit = (e) => {
     e.preventDefault();
     setTitle("");
+    setAuthor("");
     setContent("");
   };
 
@@ -31,6 +33,13 @@ const CreateBlog = () => {
           placeholder="Title"
           value={title}
           onChange={(e) => setTitle(e.target.value)}
+        />
+        <input
+          type="text"
+          className="w-full border px-3 py-2 rounded"
+          placeholder="Author"
+          value={author}
+          onChange={(e) => setAuthor(e.target.value)}
         />
         <Editor
           apiKey="t9efgvxeypkl6u9pp2mqflniqoao020rf2asbgcbpesdvb40" // Optional if you're using TinyMCE Cloud
