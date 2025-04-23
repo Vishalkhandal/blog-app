@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { FiGithub, FiMoon, FiSun, FiTag, FiX, FiMenu, FiSearch } from 'react-icons/fi';
+import { Link, NavLink } from 'react-router';
 
 function Header() {
   const [menuOpen, setMenuOpen] = useState(false);
@@ -13,9 +14,9 @@ function Header() {
 
           {/* Desktop Nav */}
           <ul className='hidden md: ml-4 md:flex items-center gap-4 text-xl'>
-            <li className='hover:text-blue-900 hover:border-b-2 cursor-pointer'>Home</li>
-            <li className='hover:text-blue-900 hover:border-b-2 cursor-pointer'>About</li>
-            <li className='hover:text-blue-900 hover:border-b-2 cursor-pointer'>Contact</li>
+            <NavLink to="/" className='hover:text-blue-900 hover:border-b-2 cursor-pointer'>Home</NavLink>
+            <NavLink to="about" className='hover:text-blue-900 hover:border-b-2 cursor-pointer'>About</NavLink>
+            <NavLink to="contact" className='hover:text-blue-900 hover:border-b-2 cursor-pointer'>Contact</NavLink>
           </ul>
           {/* Hamburger menu for mobile */}
           <button
@@ -39,8 +40,8 @@ function Header() {
             <li className='hover:bg-black hover:text-white rounded p-3 cursor-pointer'><FiSun /></li>
           </ul>
           <div className='md:flex items-center gap-2'>
-            <button className='py-1 px-2 hover:bg-blue-400 bg-blue-300 text-black rounded cursor-pointer'>Login</button>
-            <button className='py-1 px-2 hover:bg-blue-400 bg-blue-300 text-black rounded cursor-pointer'>Register</button>
+            <NavLink to="/auth/login" className='py-1 px-2 hover:bg-blue-400 bg-blue-300 text-black rounded cursor-pointer'>Login</NavLink>
+            <NavLink to="/auth/register" className='py-1 px-2 hover:bg-blue-400 bg-blue-300 text-black rounded cursor-pointer'>Register</NavLink>
           </div>
         </div>
       </div>

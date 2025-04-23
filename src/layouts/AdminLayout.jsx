@@ -1,8 +1,6 @@
 import React from 'react'
-import { Link, Outlet } from 'react-router'
-import Footer from '../components/Footer'
+import { Outlet } from 'react-router'
 import AdminManu from '../components/admin/AdminManu'
-import UserAccount from '../components/admin/UserAccount'
 import AdminSidebar from '../components/admin/AdminSidebar'
 
 function AdminLayout() {

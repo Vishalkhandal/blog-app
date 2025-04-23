@@ -12,6 +12,10 @@ import Login from "../pages/LoginForm";
 import AuthLayout from "../layouts/AuthLayout";
 import Register from "../pages/RegisterForm";
 import ShowBlogs from "../pages/ShowBlogs";
+import Users from "../pages/Users";
+import Comments from "../pages/Comments";
+import Settings from "../pages/Settings";
+import Categories from "../pages/Categories";
 
 const router = createBrowserRouter([
     {
@@ -34,9 +38,14 @@ const router = createBrowserRouter([
         element: <AdminLayout />,
         children: [
             { index: true, element: <Dashboard /> },
+            { path: "dashboard", element: <Dashboard /> },
             { path: "create", element: <CreateBlog /> },
             { path: "edit/:id", element: <EditBlog /> },
-            { path: "posts", element: <ShowBlogs /> }
+            { path: "categories", element: <Categories /> },
+            { path: "posts", element: <ShowBlogs /> },
+            { path: "users", element: <Users /> },
+            { path: "comments", element: <Comments /> },
+            { path: "settings", element: <Settings /> }
         ]
     },
 
