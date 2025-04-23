@@ -1,54 +1,7 @@
 import React, { useState } from 'react';
 import { FiSearch } from 'react-icons/fi';
-
-// Mock data for blogs
-const mockBlogs = [
-  {
-    id: 1,
-    title: 'Getting Started with React',
-    category: 'React',
-    excerpt: 'Learn the basics of React and how to build your first application.',
-    date: '2024-03-15',
-    image: 'https://images.unsplash.com/photo-1633356122544-f134324a6cee?q=80&w=1470&auto=format&fit=crop',
-    author: 'John Doe'
-  },
-  {
-    id: 2,
-    title: 'Mastering JavaScript',
-    category: 'JavaScript',
-    excerpt: 'Deep dive into advanced JavaScript concepts and patterns.',
-    date: '2024-03-10',
-    image: 'https://images.unsplash.com/photo-1627398242454-45a1465c2479?q=80&w=1374&auto=format&fit=crop',
-    author: 'Jane Smith'
-  },
-  {
-    id: 3,
-    title: 'CSS Grid Layout',
-    category: 'CSS',
-    excerpt: 'A comprehensive guide to CSS Grid Layout for modern web design.',
-    date: '2024-03-05',
-    image: 'https://images.unsplash.com/photo-1621839673705-6617adf9e890?q=80&w=1332&auto=format&fit=crop',
-    author: 'Mike Johnson'
-  },
-  {
-    id: 4,
-    title: 'Node.js Best Practices',
-    category: 'Node.js',
-    excerpt: 'Learn the best practices for building scalable Node.js applications.',
-    date: '2024-02-28',
-    image: 'https://images.unsplash.com/photo-1555066931-4365d14bab8c?q=80&w=1470&auto=format&fit=crop',
-    author: 'Sarah Wilson'
-  },
-  {
-    id: 5,
-    title: 'Web Security Essentials',
-    category: 'Security',
-    excerpt: 'Essential security practices every web developer should know.',
-    date: '2024-02-20',
-    image: 'https://images.unsplash.com/photo-1550751827-4bd374c3f58b?q=80&w=1470&auto=format&fit=crop',
-    author: 'David Brown'
-  }
-];
+import { Link } from 'react-router';
+import { mockBlogs } from '../data/mockBlogs';
 
 const Home = () => {
   const [search, setSearch] = useState('');
@@ -100,7 +53,7 @@ const Home = () => {
 
       {/* Latest Blogs */}
       <section className='mb-14'>
-        <h2 className='text-3xl font-bold mb-6 text-blue-900'>✨ Latest Blogs</h2>
+        <h2 className='text-3xl font-bold mb-6'>Latest Blogs</h2>
         <div className='grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 gap-8'>
           {latestBlogs.map((blog) => (
             <BlogCard key={blog.id} blog={blog} formatDate={formatDate} />
@@ -128,7 +81,7 @@ const Home = () => {
 // Card Component
 const BlogCard = ({ blog, formatDate }) => {
   return (
-    <div className='bg-white rounded-2xl shadow-lg overflow-hidden hover:shadow-xl hover:-translate-y-1 transition-all duration-300'>
+    <div className='bg-white rounded shadow overflow-hidden hover:shadow-sm hover:-translate-y-0.5 transition-all duration-300'>
       <img
         src={blog.image}
         alt={blog.title}
@@ -138,7 +91,7 @@ const BlogCard = ({ blog, formatDate }) => {
         <span className='text-xs font-semibold text-white bg-blue-500 w-fit px-3 py-1 rounded-full'>
           {blog.category}
         </span>
-        <h3 className='text-lg font-bold text-gray-900'>{blog.title}</h3>
+        <Link to={`/post/${blog.id}`} className='text-lg font-bold text-gray-900'>{blog.title}</Link>
         <p className='text-xs text-gray-400 mt-auto'>{formatDate(blog.date)}</p>
         <p className='text-gray-600 text-sm'>{blog.excerpt}</p>
         <p className='text-sm text-gray-500'>By {blog.author}</p>

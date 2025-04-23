@@ -8,6 +8,7 @@ import {
   FaCog,
   FaSignOutAlt,
   FaPlusSquare,
+  FaHome,
 } from "react-icons/fa"
 import { MdCategory } from 'react-icons/md';
 
@@ -15,6 +16,7 @@ const AdminSidebar = () => {
   const location = useLocation()
 
   const menuItems = [
+    { name: "Home", icon: <FaHome />, path: "/" },
     { name: "Dashboard", icon: <FaTachometerAlt />, path: "/admin/dashboard" },
     { name: "Posts", icon: <FaPenFancy />, path: "/admin/posts" },
     { name: "Create Post", icon: <FaPlusSquare />, path: "/admin/create" },
