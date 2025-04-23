@@ -4,7 +4,7 @@ import { FiGithub, FiTwitter, FiLinkedin, FiMail } from 'react-icons/fi'
 function Footer() {
   return (
     <footer className="bg-blue-100 text-black mt-10">
-      <div className="max-w-7xl mx-auto py-12 grid grid-cols-1 md:grid-cols-4 gap-10">
+      <div className="max-w-7xl mx-auto py-12 px-4 md:px-0 grid grid-cols-1 md:grid-cols-4 gap-10">
         {/* Brand + Description */}
         <div>
           <h2 className="text-3xl font-bold mb-3">Blog.</h2>

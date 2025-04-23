@@ -50,9 +50,9 @@ function Header() {
       {menuOpen && (
         <div className='md:hidden px-4 pb-4'>
           <ul className='flex flex-col gap-2 text-xl'>
-            <li className='hover:text-blue-900 cursor-pointer'>Home</li>
-            <li className='hover:text-blue-900 cursor-pointer'>About</li>
-            <li className='hover:text-blue-900 cursor-pointer'>Contact</li>
+            <NavLink to="/" className='hover:text-blue-900 cursor-pointer'>Home</NavLink>
+            <NavLink to="about" className='hover:text-blue-900 cursor-pointer'>About</NavLink>
+            <NavLink to="contact" className='hover:text-blue-900 cursor-pointer'>Contact</NavLink>
           </ul>
 
           <div className='flex flex-col gap-4 mt-4'>
@@ -65,8 +65,8 @@ function Header() {
               <li className='hover:bg-black hover:text-white rounded p-3'><FiSun /></li>
             </ul>
             <div className='flex gap-2'>
-              <button className='w-full py-1 px-2 hover:bg-blue-400 bg-blue-300 text-black rounded cursor-pointer'>Login</button>
-              <button className='w-full py-1 px-2 hover:bg-blue-400 bg-blue-300 text-black rounded cursor-pointer'>Register</button>
+              <NavLink to="/auth/login" className='w-full py-1 px-2 hover:bg-blue-400 bg-blue-300 text-black rounded cursor-pointer'>Login</NavLink>
+              <NavLink to="/auth/register" className='w-full py-1 px-2 hover:bg-blue-400 bg-blue-300 text-black rounded cursor-pointer'>Register</NavLink>
             </div>
           </div>
         </div>
