@@ -27,7 +27,7 @@ const AdminSidebar = () => {
     { name: "Comments", icon: <FaRegComments />, path: "/admin/comments" },
     { name: "Users", icon: <FaUsers />, path: "/admin/users" },
     { name: "Settings", icon: <FaCog />, path: "/admin/settings" },
-    { name: "Logout", icon: <FaSignOutAlt />, path: "/" }, // or handle logout with logic
+    { name: "Logout", icon: <FaSignOutAlt />, path: "/logout" }, // or handle logout with logic
   ]
 
   return (
