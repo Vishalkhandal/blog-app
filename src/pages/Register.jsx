@@ -6,7 +6,7 @@ import authService from '../appwrite/auth';
 import { Button, Input } from "../components/index"
 import { useForm } from 'react-hook-form';
 
-function RegisterForm() {
+function Register() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const [error, setError] = useState("")
@@ -56,7 +56,7 @@ function RegisterForm() {
 
         <div>
           <Input type="password" label="Password" placeholder="Enter your password" className="w-full px-4 py-2 border rounded bg-blue-50 focus:outline-none focus:ring-2 focus:ring-blue-400"
-            {...register("email", {
+            {...register("password", {
               required: true,
             })}
           />
@@ -80,4 +80,4 @@ function RegisterForm() {
   )
 }
 
-export default RegisterForm
+export default Register
