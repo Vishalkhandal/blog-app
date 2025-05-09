@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { FiSearch } from 'react-icons/fi';
 import { Link } from 'react-router';
 import { mockBlogs } from '../data/mockBlogs';
+import { Card } from '../components';
 
 const Home = () => {
   const [search, setSearch] = useState('');
@@ -56,7 +57,7 @@ const Home = () => {
         <h2 className='text-3xl font-bold mb-6'>Latest Blogs</h2>
         <div className='grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 gap-8'>
           {latestBlogs.map((blog) => (
-            <BlogCard key={blog.id} blog={blog} formatDate={formatDate} />
+            <Card key={blog.id} post={blog} formatDate={formatDate} />
           ))}
         </div>
       </section>
@@ -67,7 +68,8 @@ const Home = () => {
         {blogs.length > 0 ? (
           <div className='grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8'>
             {blogs.map((blog) => (
-              <BlogCard key={blog.id} blog={blog} formatDate={formatDate} />
+              // <BlogCard key={blog.id} blog={blog} formatDate={formatDate} />
+              <Card key={blog.id} post={blog} formatDate={formatDate} />
             ))}
           </div>
         ) : (

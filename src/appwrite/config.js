@@ -14,7 +14,7 @@ export class Service{
         this.bucket = new Storage(this.client);
     }
 
-    async createPost({title, slug, content, featuredImage, status, userId}){
+    async createPost({title, slug, content, featuredImage, status, userId, excerpt, author_id, author_name, category}){
         try {
             return await this.databases.createDocument(
                 conf.appwriteDatabaseId,
@@ -26,6 +26,10 @@ export class Service{
                     featuredImage,
                     status,
                     userId,
+                    excerpt,
+                    author_id,
+                    author_name,
+                    category,
                 }
             )
         } catch (error) {
@@ -33,7 +37,7 @@ export class Service{
         }
     }
 
-    async updatePost(slug, {title, content, featuredImage, status}){
+    async updatePost(slug, {title, content, featuredImage, status, excerpt, author_name, category}){
         try {
             return await this.databases.updateDocument(
                 conf.appwriteDatabaseId,
@@ -44,7 +48,9 @@ export class Service{
                     content,
                     featuredImage,
                     status,
-
+                    excerpt,
+                    author_name,
+                    category
                 }
             )
         } catch (error) {
@@ -58,7 +64,6 @@ export class Service{
                 conf.appwriteDatabaseId,
                 conf.appwriteCollectionId,
                 slug
-            
             )
             return true
         } catch (error) {
@@ -72,8 +77,7 @@ export class Service{
             return await this.databases.getDocument(
                 conf.appwriteDatabaseId,
                 conf.appwriteCollectionId,
-                slug
-            
+                slug            
             )
         } catch (error) {
             console.log("Appwrite serive :: getPost :: error", error);
@@ -87,8 +91,6 @@ export class Service{
                 conf.appwriteDatabaseId,
                 conf.appwriteCollectionId,
                 queries,
-                
-
             )
         } catch (error) {
             console.log("Appwrite serive :: getPosts :: error", error);

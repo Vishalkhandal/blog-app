@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react'
 import { useParams } from 'react-router'
 import { mockBlogs } from '../data/mockBlogs'
 
-function BlogDetails() {
+function PostDetails() {
   const { id } = useParams();
   const [comments, setComments] = useState([]);
   const [commentInput, setCommentInput] = useState("");
@@ -92,4 +92,4 @@ function BlogDetails() {
   );
 }
 
-export default BlogDetails;
+export default PostDetails;

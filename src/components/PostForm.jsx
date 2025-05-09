@@ -1,10 +1,10 @@
 import React, { useState, useCallback } from "react";
-import conf from "../../../conf/conf";
-import { Input, Button, Select, RTE } from "../../index";
+import conf from "../conf/conf";
+import { Input, Button, Select, RTE } from "./index";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router";
 import { useDispatch, useSelector } from "react-redux";
-import appwriteService from "../../../appwrite/config";
+import appwriteService from "../appwrite/config";
 
 const PostForm = ({ post }) => {
   const { register, handleSubmit, watch, setValue, control, getValues } = useForm({
