@@ -1,4 +1,4 @@
-import React from 'react'
+import React, {useState} from 'react'
 import { useDispatch } from 'react-redux'
 import authService from '../../appwrite/auth'
 import { logout } from '../../features/auth/authSlice'
@@ -11,32 +11,26 @@ function LogoutBtn({
   ...props
 }) {
   const dispatch = useDispatch()
-  const logoutHandler = async () => {
+  const [user, setUser] = useState("")
+  const logoutHandler = async (user) => {
     try {
-      console.log('button clicked')
-      await authService.logout().then(() => {
-          dispatch(logout())
-        })
-      } catch(error) {
-        console.log("Logout error: ", error);
+      const currentUser = await authService.getCurrentUser();
+      setUser(() => user = currentUser.name)
+      if (!currentUser) {
+        console.warn("User already logged out.");
+        dispatch(logout());
+        return;
       }
-    // try {
-    //   const currentUser = await authService.getCurrentUser();
-    //   console.log(currentUser)
-    //   if (!currentUser) {
-    //     console.warn("User already logged out.");
-    //     dispatch(logout());
-    //     return;
-    //   }
-    //   await authService.logout().then(() => {
-    //     dispatch(logout())
-    //   })
-    // } catch (error) {
-    //   console.error("Logout error:", error);
-    // }
+      await authService.logout().then(() => {
+        dispatch(logout())
+      })
+    } catch (error) {
+      console.error("Logout error:", error);
+    }
   }
   return (
     <>
+      <p>{user}</p>
       <button
         className={`px-4 py-2 rounded ${bgColor} ${textColor} ${className}`} {...props}
         onClick={logoutHandler}

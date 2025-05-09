@@ -135,7 +135,12 @@ function Header() {
                 </>
               )}
               {authStatus && (
-                <LogoutBtn className='hover:bg-blue-400 cursor-pointer dark:bg-gray-700 dark:hover:bg-gray-600' bgColor='bg-blue-300' textColor='text-black dark:text-white'/>
+                <LogoutBtn
+                  type="button"
+                  bgColor="bg-blue-600"
+                  textColor="text-white"
+                  className="hover:bg-blue-400 cursor-pointer dark:bg-gray-700 dark:hover:bg-gray-600"
+                />
               )}
             </div>
           </div>
