@@ -7,9 +7,7 @@ import Footer from '../Footer'
 function AuthLayout() {
   return (
     <Container>
-        <Header />
         <Outlet/>
-        <Footer/>
     </Container>
   )
 }

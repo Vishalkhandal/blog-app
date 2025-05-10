@@ -34,7 +34,7 @@ function Header() {
     },
     {
       name: "Add Post",
-      slug: "/add-post",
+      slug: "/post/create",
       active: authStatus
     },
     {
@@ -60,8 +60,7 @@ function Header() {
                 Blog
               </Logo>
             </Link>
-
-
+            
             {/* Mobile Menu Button */}
             <button
               className='md:hidden text-2xl dark:text-white'
@@ -98,13 +97,13 @@ function Header() {
                       className='hover:text-blue-900 dark:hover:text-blue-300 cursor-pointer text-black dark:text-white'
                       role="menuitem"
                       aria-label={item.name}
-                    >                      
+                    >
                       {item.name}
                     </NavLink>
                   </li>
                 ) : null
               )}
-              {!authStatus && (
+              {authStatus && (
                 <li role="none">
                   <LogoutBtn
                     type="button"

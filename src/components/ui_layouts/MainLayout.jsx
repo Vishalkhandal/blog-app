@@ -7,9 +7,7 @@ import { Outlet } from 'react-router'
 function MainLayout() {
   return (
     <Container>
-        <Header />
-        <Outlet/>
-        <Footer/>
+      <Outlet />
     </Container>
   )
 }
