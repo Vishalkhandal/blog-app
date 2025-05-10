@@ -1,23 +1,28 @@
 import React, { useState, useEffect } from 'react';
 import { Outlet } from 'react-router'
-import './App.css'
 import { Footer, Header } from './components'
 import authService from './appwrite/auth';
-import {login, logout} from "./features/auth/authSlice";
+import {login, logout, setUser} from "./features/auth/authSlice";
 import { useDispatch } from 'react-redux';
+
 function App() {
   const [loading, setLoading] = useState(true);
   const dispatch = useDispatch();
 
   useEffect(() => {
-    authService.getCurrentUser()
-      .then((userData) => {
-        if (userData) {
-          dispatch(login(userData));
-        } else {
-          dispatch(logout());
+    const checkSession = async () => {
+      try {
+        const user = await authService.getCurrentUser();
+        // console.log("User from App component:", user);
+        if (user) {
+          dispatch(setUser(user));    
         }
-      })
+      } catch (error) {
+        console.log("No active session found:", error);
+        dispatch(setUser(null));
+      }
+    }
+    checkSession();
     setLoading(false);
   }, [])
 

@@ -18,10 +18,13 @@ const PostForm = ({ post }) => {
 
   const navigate = useNavigate();
   const userData = useSelector((state) => state.auth.userData);
-  console.log("userData", userData);
+  console.log("userData from PostForm", userData);
+
 
   const submit = async (data) => {
     console.log("Form data:", data);
+
+    // Check if user is authenticated
     if (!userData || !userData.$id) {
       console.error("User is not authenticated.");
       navigate('/auth/login'); // Redirect to login page
@@ -47,11 +50,12 @@ const PostForm = ({ post }) => {
 
       if (post) {
         // Update the post
-        const updatedPost = await appwriteService.updatePost(post.$id, {
-          ...data,
-        });
+        const updatedPost = await appwriteService.updatePost({
+          ...data, featuredImage: fileId,
+          userId: userData.$id,
+        }, post.$id);
         if (updatedPost) {
-          navigate(`/post/${updatedPost.$id}`);
+          navigate(`/post/${updatedPost.slug}`);
         }
       } else {
         // Create a new post
@@ -60,7 +64,7 @@ const PostForm = ({ post }) => {
           userId: userData.$id,
         });
         if (newPost) {
-          navigate(`/post/${newPost.$id}`);
+          navigate(`/post/${newPost.slug}`);
         }
       }
     } catch (error) {

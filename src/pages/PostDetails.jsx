@@ -1,94 +1,98 @@
 import React, { useState, useEffect } from 'react'
-import { useParams } from 'react-router'
-import { mockBlogs } from '../data/mockBlogs'
+import { Link, useNavigate, useParams } from 'react-router'
+import { useSelector } from 'react-redux';
+import appwriteService from '../appwrite/config';
+import { Button, Container } from '../components/index';
+import parse from 'html-react-parser';
 
 function PostDetails() {
-  const { id } = useParams();
-  const [comments, setComments] = useState([]);
-  const [commentInput, setCommentInput] = useState("");
-  const [blog, setBlog] = useState(null);
+  const [post, setPost] = useState(null);
+  const { slug } = useParams();
+  const navigate = useNavigate();
+  const userData = useSelector((state) => state.auth.userData);
+    console.log("userData from PostDetails", userData);
 
+  console.log("Slug from URL:", slug);
   useEffect(() => {
-    // Find the blog with matching ID
-    const foundBlog = mockBlogs.find(blog => blog.id === parseInt(id));
-    setBlog(foundBlog);
-  }, [id]);
-
-  const handleCommentSubmit = (e) => {
-    e.preventDefault();
-    if (commentInput.trim()) {
-      setComments([
-        ...comments,
-        {
-          id: Date.now(),
-          text: commentInput,
-          author: 'Anonymous',
-          date: new Date().toISOString()
-        },
-      ]);
-      setCommentInput("");
+    if (slug) {
+      appwriteService.getPost(slug)
+        .then((post) => {
+          if (post) {
+            setPost(post);
+            console.log("Post data:", post);
+          } else {
+            console.error("Post not found");
+            navigate("/"); // Redirect to home if post is not found
+          }
+        })
+        .catch((error) => {
+          console.error("Error fetching post:", error);
+          navigate("/"); // Redirect to home on error
+        });
+    } else {
+      navigate("/");
     }
-  };
+  }, [slug, navigate]);
 
-  if (!blog) {
-    return <p className="text-center mt-10 text-xl">Blog not found</p>;
-  }
-
-  return (
-    <div className="max-w-3xl mx-auto px-4 py-8">
-      <div className="mb-8">
-        <img src={blog.image} alt={blog.title} className="w-full h-64 object-cover rounded-lg mb-6" />
-        <h1 className="text-4xl font-bold mb-4">{blog.title}</h1>
-        <div className="flex items-center gap-4 mb-6">
-          <span className="text-sm font-semibold text-white bg-blue-500 px-3 py-1 rounded-full">
-            {blog.category}
-          </span>
-          <p className="text-gray-600">By {blog.author}</p>
-          <p className="text-gray-500 text-sm">{new Date(blog.date).toLocaleDateString()}</p>
+  return post ? (
+    <div className="py-8">
+      <Container>
+        <div className="flex justify-between items-center mb-6">
+          <Link to="/" className="text-blue-500 hover:underline">Back to Home</Link>
+          {userData && (
+            <>
+              <Link to={`/post/edit/${post.slug}`}>
+                <Button
+                  className="text-blue-500 hover:underline"
+                  bgColor="bg-green-500"
+                >
+                  Edit Post
+                </Button>
+              </Link>
+              <Button
+                onClick={async () => {
+                  if (window.confirm("Are you sure you want to delete this post?")) {
+                    appwriteService.deletePost(post.$id)
+                      .then(() => {
+                        navigate("/");
+                      })
+                      .catch((error) => {
+                        console.error("Error deleting post:", error);
+                      });
+                  }
+                }}
+                className="text-blue-500 hover:underline"
+                bgColor="bg-green-500"
+              >
+                Delete Post
+              </Button>
+            </>
+          )}
         </div>
-      </div>
-
-      <div
-        className="prose prose-lg mb-10"
-        dangerouslySetInnerHTML={{ __html: blog.content }}
-      ></div>
-
-      <section className="border-t pt-8">
-        <h2 className="text-2xl font-semibold mb-6">Comments ({comments.length})</h2>
-        <form onSubmit={handleCommentSubmit} className="mb-8 space-y-4">
-          <textarea
-            value={commentInput}
-            onChange={(e) => setCommentInput(e.target.value)}
-            placeholder="Write a comment..."
-            className="w-full border p-3 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-            rows={3}
-          ></textarea>
-          <button
-            type="submit"
-            className="bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700 transition-colors"
-          >
-            Post Comment
-          </button>
-        </form>
-        {comments.length === 0 ? (
-          <p className="text-gray-500">No comments yet. Be the first!</p>
-        ) : (
-          <ul className="space-y-4">
-            {comments.map((comment) => (
-              <li key={comment.id} className="p-4 bg-gray-50 rounded-lg">
-                <div className="flex items-center gap-2 mb-2">
-                  <span className="font-semibold">{comment.author}</span>
-                  <span className="text-gray-500 text-sm">
-                    {new Date(comment.date).toLocaleDateString()}
-                  </span>
-                </div>
-                <p className="text-gray-700">{comment.text}</p>
-              </li>
-            ))}
-          </ul>
-        )}
-      </section>
+        <div className="mb-8">
+          {post.featuredImage && (
+            <img
+              src={appwriteService.getFilePreview(post.featuredImage)}
+              alt={post.title}
+              className="w-full h-64 object-cover rounded-lg mb-6"
+            />
+          )}
+          <h1 className="text-4xl font-bold mb-4">{post.title}</h1>
+          <div className="flex items-center gap-4 mb-6">
+            <span className="text-sm font-semibold text-white bg-blue-500 px-3 py-1 rounded-full">
+              {post.category}
+            </span>
+            <p className="text-gray-600">By {post.author_name}</p>
+            <p className="text-gray-500 text-sm">{new Date(post.date).toLocaleDateString()}</p>
+          </div>
+        </div>
+        <div className="browser-css">
+          {parse(post.content)}
+        </div>
+      </Container>
     </div>
+  ) : (
+    <p className="text-center mt-10 text-xl">Blog not found</p>
   );
 }
 

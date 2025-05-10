@@ -20,7 +20,7 @@ export const router = createBrowserRouter([
                 Component: MainLayout,
                 children: [
                     { index: true, Component: Home },
-                    { path: "post/:id", Component: PostDetails },
+                    { path: "post/:slug", Component: PostDetails },
                     { path: "posts", Component: ShowPosts },
                     {
                         path: "post",
