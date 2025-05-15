@@ -1,5 +1,5 @@
-import React, { useCallback, useEffect } from "react";
-import { Input, Button, Select, RTE } from "./index";
+import React, { useCallback, useEffect, useState } from "react";
+import { Input, Button, Select, TextArea, RTE } from "./index";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router";
 import { useSelector } from "react-redux";
@@ -9,34 +9,40 @@ const PostForm = ({ post }) => {
   const { register, handleSubmit, watch, setValue, control, getValues } = useForm({
     defaultValues: {
       title: post?.title || "",
-      slug: post?.$id || "",
+      slug: post?.slug || "",
       content: post?.content || "",
+      featuredImage: post?.featuredImage | "",
       status: post?.status || "active",
       category: post?.category || "news",
+      authorName: post?.authorName || "",
+      excerpt: post?.excerpt || "",
+      tags: post?.tags || ""
     },
   });
 
   const navigate = useNavigate();
   const userData = useSelector((state) => state.auth.userData);
-  console.log("userData from PostForm", userData);
+  const [error, setError] = useState("");
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [imagePreview, setImagePreview] = useState(post?.featuredImage ? appwriteService.getFilePreview(post.featuredImage) : null);
 
-
-  const submit = async (data) => {
-    console.log("Form data:", data);
-
-    // Check if user is authenticated
+  const onSubmit = async (data) => {
+    setError("");
+    setIsSubmitting(true);
     if (!userData || !userData.$id) {
-      console.error("User is not authenticated.");
-      navigate('/auth/login'); // Redirect to login page
+      setError("Please login to create a post");
+      navigate('/auth/login');
       return;
     }
 
     try {
       let fileId = post?.featuredImage;
 
-      // Handle file upload if a new image is provided
       if (data.image && data.image[0]) {
         const file = await appwriteService.uploadFile(data.image[0]);
+        if (!file) {
+          throw new Error("Failed to upload image");
+        }
         fileId = file.$id;
 
         // Delete the old file if updating
@@ -45,33 +51,41 @@ const PostForm = ({ post }) => {
         }
       }
 
-      // Add the file ID to the data
-      data.featuredImage = fileId;
+      const postData = {
+        userId: userData.$id,
+        title: data.title,
+        slug: data.slug,
+        content: data.content,
+        status: data.status,
+        featuredImage: fileId || null,
+        authorName: userData.name,
+        excerpt: data.excerpt,
+        category: data.category,
+        tags: data.tags
+      };
 
+      let result;
       if (post) {
         // Update the post
-        const updatedPost = await appwriteService.updatePost({
-          ...data, featuredImage: fileId,
-          userId: userData.$id,
-        }, post.$id);
-        if (updatedPost) {
-          navigate(`/post/${updatedPost.slug}`);
-        }
+        result = await appwriteService.updatePost(post.slug, postData);
       } else {
         // Create a new post
-        const newPost = await appwriteService.createPost({
-          ...data,
-          userId: userData.$id,
-        });
-        if (newPost) {
-          navigate(`/post/${newPost.slug}`);
-        }
+        result = await appwriteService.createPost(postData);
+      }
+
+      if (result) {
+        navigate(`/post/${result.slug}`);
+      } else {
+        throw new Error("Failed to save post");
       }
     } catch (error) {
-      console.error("Error submitting the form:", error);
+      setError(error.message || "An error occurred while submitting the form.");
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
+  // Transform the name value to a slug format in slug field  
   const slugTransform = useCallback((value) => {
     if (value && typeof value === "string") {
       return value
@@ -83,6 +97,7 @@ const PostForm = ({ post }) => {
     return "";
   }, []);
 
+  // Watch the title field and update the slug field accordingly
   useEffect(() => {
     const subscription = watch((value, { name }) => {
       if (name === "title") {
@@ -93,19 +108,36 @@ const PostForm = ({ post }) => {
     return () => subscription.unsubscribe();
   }, [watch, slugTransform, setValue]);
 
+  // Handle image preview
+  const handleImageChange = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setImagePreview(reader.result);
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+
   return (
     <div className="max-w-3xl mx-auto">
       <h1 className="text-2xl font-bold mb-4">{post ? "Edit Blog" : "Create New Blog"}</h1>
-      <form className="space-y-4" onSubmit={handleSubmit(submit)}>
+      {error && (
+        <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative mb-4" role="alert">
+          <span className="block sm:inline">{error}</span>
+        </div>
+      )}
+      <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
         <Input
           label="Title"
           placeholder="Title"
-          {...register("title", { required: true })}
+          {...register("title", { required: "Title is required" })}
         />
         <Input
           label="Slug"
           placeholder="Slug"
-          {...register("slug", { required: true })}
+          {...register("slug", { required: "Slug is required" })}
           onInput={(e) => {
             setValue("slug", slugTransform(e.currentTarget.value), { shouldValidate: true });
           }}
@@ -113,17 +145,27 @@ const PostForm = ({ post }) => {
         <Input
           label="Author"
           placeholder="Author"
-          {...register("author", { required: true })}
+          {...register("authorName", { required: "Author is required" })}
         />
         <Select
           options={["active", "inactive"]}
           label="Status"
-          {...register("status", { required: true })}
+          {...register("status", { required: "Status is required" })}
         />
         <Select
           options={["news", "fashion", "lifestyle", "travel", "food", "sports"]}
           label="Category"
-          {...register("category", { required: true })}
+          {...register("category", { required: "Category is required" })}
+        />
+        <Input
+          label="Tags"
+          placeholder="Enter Tag"
+          {...register("tags", { required: "Tag is required" })}
+        />
+        <TextArea
+          label="Summary"
+          placeholder="Write a summary for your blog"
+          {...register("excerpt", {required: "Summary is required"})}
         />
         <RTE
           label="Content"
@@ -132,22 +174,28 @@ const PostForm = ({ post }) => {
           defaultValue={getValues("content")}
         />
         <Input
-          label="Featured Image"
+          label="Featured Image (Optional)"
           type="file"
           accept="image/png, image/jpg, image/jpeg, image/gif"
-          {...register("image", { required: !post })}
+          {...register("featuredImage")}
+          onChange={handleImageChange}
         />
-        {post && post.featuredImage && (
+        {imagePreview && (
           <div className="w-full mb-4">
             <img
-              src={appwriteService.getFilePreview(post.featuredImage)}
-              alt={post.title}
-              className="rounded-lg"
+              src={imagePreview}
+              alt="Preview"
+              className="w-full h-64 object-cover rounded-lg"
             />
           </div>
         )}
-        <Button type="submit" bgColor={post ? "bg-green-500" : undefined} className="w-full">
-          {post ? "Update" : "Submit"}
+        <Button 
+          type="submit" 
+          bgColor={post ? "bg-green-500" : undefined} 
+          className="w-full"
+          disabled={isSubmitting}
+        >
+          {isSubmitting ? "Saving..." : post ? "Update" : "Submit"}
         </Button>
       </form>
     </div>

@@ -14,7 +14,7 @@ export class Service {
         this.bucket = new Storage(this.client);
     }
 
-    async createPost({ title, slug, content, featuredImage, status, userId, excerpt, author_id, author_name, category }) {
+    async createPost({ title, slug, content, featuredImage, status, userId, excerpt, authorName, category, tags }) {
         try {
             // Check if slug already exists
             const existingPosts = await this.databases.listDocuments(
@@ -27,22 +27,22 @@ export class Service {
                 throw new Error("Slug already exists. Please use a different slug.");
             }
 
-            // Create the post
+            // Create the post using slug as document ID
             return await this.databases.createDocument(
                 conf.appwriteDatabaseId,
                 conf.appwriteCollectionId,
-                ID.unique(),
+                slug, // Use slug as document ID
                 {
                     slug,
                     title,
                     content,
-                    featuredImage,
+                    featuredImage: featuredImage || null,
                     status,
                     userId,
                     excerpt,
-                    author_id,
-                    author_name,
+                    authorName,
                     category,
+                    tags
                 }
             );
         } catch (error) {
@@ -51,51 +51,70 @@ export class Service {
         }
     }
 
-    async updatePost(slug, { title, content, featuredImage, status, excerpt, author_name, category }) {
+    async updatePost(slug, { title, content, featuredImage, status, excerpt, authorName, category, tags }) {
         try {
             return await this.databases.updateDocument(
                 conf.appwriteDatabaseId,
                 conf.appwriteCollectionId,
-                slug,
+                slug, // Use slug as document ID
                 {
                     title,
                     content,
                     featuredImage,
                     status,
                     excerpt,
-                    author_name,
-                    category
+                    authorName,
+                    category,
+                    tags
                 }
-            )
+            );
         } catch (error) {
-            console.log("Appwrite serive :: updatePost :: error", error);
+            console.log("Appwrite service :: updatePost :: error", error);
+            throw error;
         }
     }
 
     async deletePost(slug) {
         try {
+            // First get the post to get the image ID
+            const post = await this.databases.getDocument(
+                conf.appwriteDatabaseId,
+                conf.appwriteCollectionId,
+                slug
+            );
+
+            // Delete the image from storage if it exists
+            if (post.featuredImage) {
+                await this.deleteFile(post.featuredImage);
+            }
+
+            // Delete the post document
             await this.databases.deleteDocument(
                 conf.appwriteDatabaseId,
                 conf.appwriteCollectionId,
                 slug
-            )
-            return true
+            );
+            return true;
         } catch (error) {
-            console.log("Appwrite serive :: deletePost :: error", error);
-            return false
+            console.log("Appwrite service :: deletePost :: error", error);
+            return false;
         }
     }
 
     async getPost(slug) {
         try {
-            return await this.databases.getDocument(
+            const post = await this.databases.getDocument(
                 conf.appwriteDatabaseId,
                 conf.appwriteCollectionId,
-                [Query.equal("slug", slug)]
-            )
+                slug
+            );            
+            if (post.featuredImage) {
+                post.imageUrl = this.getFilePreview(post.featuredImage);
+            }            
+            return post;
         } catch (error) {
-            console.log("Appwrite serive :: getPost :: error", error);
-            return false
+            console.log("Appwrite service :: getPost :: error", error);
+            throw error;
         }
     }
 
@@ -113,7 +132,6 @@ export class Service {
     }
 
     // file upload service
-
     async uploadFile(file) {
         try {
             return await this.bucket.createFile(
@@ -151,3 +169,7 @@ export class Service {
 
 const service = new Service()
 export default service
+
+
+
+// File does not show on browser and do not delete as well in database. I think fileId which I try to store in database do not store in database only name add. I think I need to update my fileId when data is submittd in PostForm component

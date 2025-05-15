@@ -26,7 +26,7 @@ export const router = createBrowserRouter([
                         path: "post",
                         children: [
                             { path: "create", Component: CreatePost },
-                            { path: "edit/:id", Component: EditPost },
+                            { path: "edit/:slug", Component: EditPost },
                         ]
                     }
                 ]
