@@ -1,5 +1,5 @@
 import React from 'react'
-import { Card } from '../components'
+import Card from '../components/ui_components/Card';
 import { mockBlogs } from '../data/mockBlogs';
 
 function ShowPosts() {

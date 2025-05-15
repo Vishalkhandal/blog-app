@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router";
 import PostForm from "../components/PostForm";
 import appwriteService from "../appwrite/config";
-import { Container } from "../components";
+import  Container from "../components/ui_components/container/Container";
 
 function EditPost() {
   const [post, setPost] = useState(null);

@@ -2,8 +2,9 @@ import React, { useState, useEffect } from 'react'
 import { Link, useNavigate, useParams } from 'react-router'
 import { useSelector } from 'react-redux';
 import appwriteService from '../appwrite/config';
-import { Button, Container } from '../components/index';
 import parse from 'html-react-parser';
+import Button from '../components/ui_components/Button';
+import Container from '../components/ui_components/container/Container';
 
 function PostDetails() {
   const [post, setPost] = useState(null);

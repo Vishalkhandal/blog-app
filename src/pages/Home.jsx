@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { FiSearch } from 'react-icons/fi';
 import { Link } from 'react-router';
 import { mockBlogs } from '../data/mockBlogs';
-import { Card } from '../components';
+import Card  from '../components/ui_components/Card';
 
 const Home = () => {
   const [search, setSearch] = useState('');

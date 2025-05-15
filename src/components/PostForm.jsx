@@ -1,5 +1,9 @@
 import React, { useCallback, useEffect, useState } from "react";
-import { Input, Button, Select, TextArea, RTE } from "./index";
+import Input from "./ui_components/Input";
+import Button from "./ui_components/Button";
+import Select from "./ui_components/Select";
+import TextArea from "./ui_components/Textarea";
+import RTE from "./ui_components/RTE"
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router";
 import { useSelector } from "react-redux";

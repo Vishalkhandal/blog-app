@@ -3,7 +3,8 @@ import { useDispatch } from 'react-redux'
 import { Link, useNavigate } from 'react-router';
 import { login } from '../features/auth/authSlice';
 import authService from '../appwrite/auth';
-import { Button, Input } from "../components/index"
+import Button from "../components/ui_components/Button"
+import Input from "../components/ui_components/Input"
 import { useForm } from 'react-hook-form';
 
 function Register() {
