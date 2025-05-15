@@ -157,7 +157,7 @@ const PostForm = ({ post }) => {
           {...register("status", { required: "Status is required" })}
         />
         <Select
-          options={["news", "fashion", "lifestyle", "travel", "food", "sports"]}
+          options={["news", "fashion", "lifestyle", "travel", "food", "sports", "Education"]}
           label="Category"
           {...register("category", { required: "Category is required" })}
         />
