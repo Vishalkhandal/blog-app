@@ -6,7 +6,7 @@ import appwriteService from "../appwrite/config";
 import Input from "./ui_components/Input";
 import Button from "./ui_components/Button";
 import Select from "./ui_components/Select";
-import TextArea from "./ui_components/Textarea";
+import TextArea from "./ui_components/TextArea";
 import RTE from "./ui_components/RTE"
 
 const PostForm = ({ post }) => {
