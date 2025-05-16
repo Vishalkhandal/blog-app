@@ -1,21 +1,50 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { FiSearch } from 'react-icons/fi';
 import { Link } from 'react-router';
-import { mockBlogs } from '../data/mockBlogs';
-import Card  from '../components/ui_components/Card';
+import Card from '../components/ui_components/Card';
+import service from '../appwrite/config';
+import { Query } from 'appwrite';
 
 const Home = () => {
   const [search, setSearch] = useState('');
-  const [blogs, setBlogs] = useState(mockBlogs);
+  const [blogs, setBlogs] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    fetchBlogs();
+  }, []);
+
+  const fetchBlogs = async () => {
+    try {
+      const response = await service.getPosts([Query.equal("status", "active")]);
+      if (response) {
+        const posts = response.documents.map(post => ({
+          id: post.$id,
+          title: post.title,
+          excerpt: post.excerpt,
+          image: post.featuredImage ? service.getFilePreview(post.featuredImage) : null,
+          category: post.category,
+          author: post.authorName,
+          date: post.$createdAt,
+          slug: post.slug
+        }));
+        setBlogs(posts);
+      }
+    } catch (error) {
+      console.error("Error fetching blogs:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   const handleSearch = (e) => {
     e.preventDefault();
     if (!search.trim()) {
-      setBlogs(mockBlogs);
+      fetchBlogs();
       return;
     }
 
-    const filtered = mockBlogs.filter(
+    const filtered = blogs.filter(
       (blog) =>
         blog.title.toLowerCase().includes(search.toLowerCase()) ||
         blog.category.toLowerCase().includes(search.toLowerCase()) ||
@@ -29,9 +58,19 @@ const Home = () => {
     return new Date(dateString).toLocaleDateString('en-IN', options);
   };
 
-  const latestBlogs = [...mockBlogs]
+  const latestBlogs = [...blogs]
     .sort((a, b) => new Date(b.date) - new Date(a.date))
     .slice(0, 2);
+
+  if (loading) {
+    return (
+      <div className="max-w-7xl mx-auto px-4 py-10">
+        <div className="flex justify-center items-center h-64">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-500"></div>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className='max-w-7xl mx-auto px-4 py-10'>
@@ -68,7 +107,6 @@ const Home = () => {
         {blogs.length > 0 ? (
           <div className='grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8'>
             {blogs.map((blog) => (
-              // <BlogCard key={blog.id} blog={blog} formatDate={formatDate} />
               <Card key={blog.id} post={blog} formatDate={formatDate} />
             ))}
           </div>
@@ -76,28 +114,6 @@ const Home = () => {
           <p className='text-gray-500 italic'>No blogs found for your search.</p>
         )}
       </section>
-    </div>
-  );
-};
-
-// Card Component
-const BlogCard = ({ blog, formatDate }) => {
-  return (
-    <div className='bg-white rounded shadow overflow-hidden hover:shadow-sm hover:-translate-y-0.5 transition-all duration-300'>
-      <img
-        src={blog.image}
-        alt={blog.title}
-        className='w-full h-48 object-cover'
-      />
-      <div className='p-5 flex flex-col gap-2'>
-        <span className='text-xs font-semibold text-white bg-blue-500 w-fit px-3 py-1 rounded-full'>
-          {blog.category}
-        </span>
-        <Link to={`/post/${blog.id}`} className='text-lg font-bold text-gray-900'>{blog.title}</Link>
-        <p className='text-xs text-gray-400 mt-auto'>{formatDate(blog.date)}</p>
-        <p className='text-gray-600 text-sm'>{blog.excerpt}</p>
-        <p className='text-sm text-gray-500'>By {blog.author}</p>
-      </div>
     </div>
   );
 };

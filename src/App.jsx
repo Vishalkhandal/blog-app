@@ -14,7 +14,7 @@ function App() {
     const checkSession = async () => {
       try {
         const user = await authService.getCurrentUser();
-        // console.log("User from App component:", user);
+        console.log("User from App component:", user);
         if (user) {
           dispatch(setUser(user));    
         }
