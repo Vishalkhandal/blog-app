@@ -16,13 +16,13 @@ const UnauthenticatedHome = () => {
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <Link
-              to="/register"
+              to="/auth/register"
               className="px-8 py-3 rounded-full bg-blue-600 text-white font-semibold hover:bg-blue-700 transition duration-300 shadow-lg hover:shadow-xl"
             >
               Get Started Free
             </Link>
             <Link
-              to="/login"
+              to="/auth/login"
               className="px-8 py-3 rounded-full bg-white text-blue-600 font-semibold border-2 border-blue-600 hover:bg-blue-50 transition duration-300"
             >
               Sign In
@@ -96,7 +96,7 @@ const UnauthenticatedHome = () => {
           <h2 className="text-3xl font-bold mb-4">Ready to Start Your Journey?</h2>
           <p className="text-xl mb-8">Join thousands of writers and readers today!</p>
           <Link
-            to="/register"
+            to="/auth/register"
             className="inline-block px-8 py-3 rounded-full bg-white text-blue-600 font-semibold hover:bg-blue-50 transition duration-300 shadow-lg hover:shadow-xl"
           >
             Create Your Account

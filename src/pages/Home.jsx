@@ -3,6 +3,7 @@ import { FiSearch, FiX } from 'react-icons/fi';
 import Card from '../components/ui_components/Card';
 import service from '../appwrite/config';
 import { Query } from 'appwrite';
+import UnauthenticatedHome from "../components/UnauthenticatedHome"
 
 const Home = () => {
   const [search, setSearch] = useState('');
@@ -78,6 +79,12 @@ const Home = () => {
       </div>
     );
   } 
+
+  if(allBlogs.length === 0) {
+    return (
+      <UnauthenticatedHome />
+    )
+  }
 
   return (
     <div className='max-w-7xl mx-auto px-4 py-10'>
