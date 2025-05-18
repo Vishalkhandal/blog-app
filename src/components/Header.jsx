@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { FiMoon, FiSun, FiX, FiMenu } from 'react-icons/fi';
+import { FiMoon, FiSun, FiX, FiMenu, FiUser } from 'react-icons/fi';
 import { Link, NavLink } from 'react-router';
 import Container from './ui_components/container/Container';
 import Logo from './ui_components/Logo';
@@ -10,6 +10,7 @@ import LogoutBtn from './ui_components/LogoutBtn';
 function Header() {
   const dispatch = useDispatch()
   const authStatus = useSelector((state) => state.auth.status)
+  const userData = useSelector((state) => state.auth.userData)
   const [menuOpen, setMenuOpen] = useState(false);
   const theme = useSelector((state) => state.theme.theme)
   const [currentTheme, setCurrentTheme] = useState(theme);
@@ -104,14 +105,25 @@ function Header() {
                 ) : null
               )}
               {authStatus && (
-                <li role="none">
-                  <LogoutBtn
-                    type="button"
-                    bgColor="bg-blue-600"
-                    textColor="text-white"
-                    className="hover:bg-blue-400 cursor-pointer dark:bg-gray-700 dark:hover:bg-gray-600"
-                  />
-                </li>
+                <>
+                  <li role="none" className="flex items-center gap-2">
+                    <Link
+                      to={`/profile/${userData?.$id}`}
+                      className="flex items-center gap-2 hover:text-blue-900 dark:hover:text-blue-300 cursor-pointer text-black dark:text-white"
+                    >
+                      <FiUser className="text-xl" />
+                      <span>{userData?.name || 'Profile'}</span>
+                    </Link>
+                  </li>
+                  <li role="none">
+                    <LogoutBtn
+                      type="button"
+                      bgColor="bg-blue-600"
+                      textColor="text-white"
+                      className="hover:bg-blue-400 cursor-pointer dark:bg-gray-700 dark:hover:bg-gray-600"
+                    />
+                  </li>
+                </>
               )}
             </ul>
           </div>
@@ -133,7 +145,7 @@ function Header() {
           </ul>
 
           <div className='flex flex-col gap-4 mt-4'>
-            <ul className='flex gap-2 text-xl' role="list">
+            <ul className='flex flex-col gap-2 text-xl' role="list">
               <li>
                 <button
                   onClick={handleThemeToggle}
@@ -161,14 +173,25 @@ function Header() {
                 ) : null
               )}
               {authStatus && (
-                <li role="none">
-                  <LogoutBtn
-                    type="button"
-                    bgColor="bg-blue-600"
-                    textColor="text-white"
-                    className="hover:bg-blue-400 cursor-pointer dark:bg-gray-700 dark:hover:bg-gray-600"
-                  />
-                </li>
+                <>
+                  <li role="none">
+                    <Link
+                      to={`/profile/${userData?.$id}`}
+                      className="flex items-center gap-2 hover:text-blue-900 dark:hover:text-blue-300 cursor-pointer text-black dark:text-white"
+                    >
+                      <FiUser className="text-xl" />
+                      <span>{userData?.name || 'Profile'}</span>
+                    </Link>
+                  </li>
+                  <li role="none">
+                    <LogoutBtn
+                      type="button"
+                      bgColor="bg-blue-600"
+                      textColor="text-white"
+                      className="hover:bg-blue-400 cursor-pointer dark:bg-gray-700 dark:hover:bg-gray-600"
+                    />
+                  </li>
+                </>
               )}
             </ul>
           </div>

@@ -9,6 +9,7 @@ import AuthLayout from "../components/ui_layouts/AuthLayout";
 import Register from "../pages/Register";
 import ShowPosts from "../pages/ShowPosts";
 import App from "../App";
+import Profile from "../pages/Profile";
 
 export const router = createBrowserRouter([
     {
@@ -20,6 +21,7 @@ export const router = createBrowserRouter([
                 Component: MainLayout,
                 children: [
                     { index: true, Component: Home },
+                    { path: "profile/:id", Component: Profile },
                     { path: "post/:slug", Component: PostDetails },
                     { path: "posts", Component: ShowPosts },
                     {
