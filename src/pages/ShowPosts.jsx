@@ -34,7 +34,7 @@ function ShowPosts() {
           id: post.$id,
           title: post.title,
           excerpt: post.excerpt,
-          image: post.featuredImage ? service.getFilePreview(post.featuredImage) : null,
+          image: post.featuredImage ? service.getFileView(post.featuredImage) : null,
           category: post.category,
           author: post.authorName,
           date: post.$createdAt,

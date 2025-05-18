@@ -109,7 +109,7 @@ export class Service {
                 slug
             );            
             if (post.featuredImage) {
-                post.imageUrl = this.getFilePreview(post.featuredImage);
+                post.imageUrl = this.getFileView(post.featuredImage);
             }            
             return post;
         } catch (error) {
@@ -158,8 +158,8 @@ export class Service {
         }
     }
 
-    getFilePreview(fileId) {
-        return this.bucket.getFilePreview(
+    getFileView(fileId) {
+        return this.bucket.getFileView(
             conf.appwriteBucketId,
             fileId
         )

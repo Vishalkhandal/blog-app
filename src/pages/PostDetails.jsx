@@ -96,7 +96,7 @@ function PostDetails() {
           {post.featuredImage && (
             <div className="w-full h-[400px] mb-6 overflow-hidden rounded-lg">
               <img
-                src={post.imageUrl || appwriteService.getFilePreview(post.featuredImage)}
+                src={post.imageUrl || appwriteService.getFileView(post.featuredImage)}
                 alt={post.title}
                 className="w-full h-full object-cover"
                 onError={(e) => {
@@ -111,7 +111,7 @@ function PostDetails() {
             <span className="text-sm font-semibold text-white bg-blue-500 px-3 py-1 rounded-full">
               {post.category}
             </span>
-            <p className="text-gray-600">By {post.author_name}</p>
+            <p className="text-gray-600">By {post.authorName}</p>
             <p className="text-gray-500 text-sm">{new Date(post.$createdAt).toLocaleDateString()}</p>
           </div>
         </div>

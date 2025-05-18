@@ -15,10 +15,8 @@ const PostForm = ({ post }) => {
       title: post?.title || "",
       slug: post?.slug || "",
       content: post?.content || "",
-      featuredImage: post?.featuredImage | "",
       status: post?.status || "active",
       category: post?.category || "news",
-      authorName: post?.authorName || "",
       excerpt: post?.excerpt || "",
       tags: post?.tags || ""
     },
@@ -28,7 +26,7 @@ const PostForm = ({ post }) => {
   const userData = useSelector((state) => state.auth.userData);
   const [error, setError] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [imagePreview, setImagePreview] = useState(post?.featuredImage ? appwriteService.getFilePreview(post.featuredImage) : null);
+  const [imageView, setImageView] = useState(post?.featuredImage ? appwriteService.getFileView(post.featuredImage) : null);
 
   const onSubmit = async (data) => {
     setError("");
@@ -118,7 +116,7 @@ const PostForm = ({ post }) => {
     if (file) {
       const reader = new FileReader();
       reader.onloadend = () => {
-        setImagePreview(reader.result);
+        setImageView(reader.result);
       };
       reader.readAsDataURL(file);
     }
@@ -145,11 +143,6 @@ const PostForm = ({ post }) => {
           onInput={(e) => {
             setValue("slug", slugTransform(e.currentTarget.value), { shouldValidate: true });
           }}
-        />
-        <Input
-          label="Author"
-          placeholder="Author"
-          {...register("authorName", { required: "Author is required" })}
         />
         <Select
           options={["active", "inactive"]}
@@ -181,13 +174,13 @@ const PostForm = ({ post }) => {
           label="Featured Image (Optional)"
           type="file"
           accept="image/png, image/jpg, image/jpeg, image/gif"
-          {...register("featuredImage")}
+          {...register("image", {required: !post})}
           onChange={handleImageChange}
         />
-        {imagePreview && (
+        {imageView && (
           <div className="w-full mb-4">
             <img
-              src={imagePreview}
+              src={imageView}
               alt="Preview"
               className="w-full h-64 object-cover rounded-lg"
             />
