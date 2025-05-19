@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useParams } from 'react-router';
+import { NavLink, useParams } from 'react-router';
 import { useSelector } from 'react-redux';
 import { FiUser, FiMail, FiCalendar, FiEdit, FiPlus, FiCheckCircle, FiClock, FiArchive, FiCircle } from 'react-icons/fi';
 import service from '../appwrite/config';
@@ -159,10 +159,10 @@ const Profile = () => {
             </div>
           </div>
           {currentUser?.$id === userId && (
-            <button className="flex items-center gap-2 px-6 py-3 bg-blue-600 text-white rounded-full hover:bg-blue-700 transition duration-300 shadow-lg hover:shadow-xl">
+            <NavLink to="/post/create" className="flex items-center gap-2 px-6 py-3 bg-blue-600 text-white rounded-full hover:bg-blue-700 transition duration-300 shadow-lg hover:shadow-xl">
               <FiPlus className="w-5 h-5" />
               <span>Create Post</span>
-            </button>
+            </NavLink>
           )}
         </div>
 
