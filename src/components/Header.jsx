@@ -51,20 +51,20 @@ function Header() {
   ]
 
   return (
-    <header className='bg-blue-100 dark:bg-gray-900 transition-colors duration-200' role="banner">
+    <header className='sticky top-0 z-50 bg-white dark:bg-gray-900 shadow-md transition-all duration-300' role="banner">
       <Container>
         <nav className='flex items-center justify-between py-4' role="navigation" aria-label="Main navigation">
           {/* Logo & Nav */}
           <div className='flex items-center justify-between w-full md:w-auto'>
-            <Link to="/" className="flex items-center" aria-label="Home">
-              <Logo className='text-3xl md:text-5xl font-bold dark:text-white'>
+            <Link to="/" className="flex items-center group" aria-label="Home">
+              <Logo className='text-3xl md:text-4xl font-bold text-blue-600 dark:text-blue-400 transition-transform duration-300 group-hover:scale-105'>
                 Blog
               </Logo>
             </Link>
             
             {/* Mobile Menu Button */}
             <button
-              className='md:hidden text-2xl dark:text-white'
+              className='md:hidden text-2xl text-gray-700 dark:text-gray-200 hover:text-blue-600 dark:hover:text-blue-400 transition-colors duration-200'
               onClick={() => setMenuOpen(!menuOpen)}
               aria-expanded={menuOpen}
               aria-controls="mobile-menu"
@@ -75,18 +75,18 @@ function Header() {
           </div>
 
           {/* Right Controls */}
-          <div className='hidden md:flex items-center gap-4'>
-            <ul className='md:flex items-center text-xl' role="list">
+          <div className='hidden md:flex items-center gap-6'>
+            <ul className='flex items-center gap-3 text-lg' role="list">
               <li>
                 <button
                   onClick={handleThemeToggle}
-                  className='hover:bg-black hover:text-white dark:hover:bg-white dark:hover:text-black rounded p-3 cursor-pointer transition-colors duration-200'
+                  className='p-2 rounded-full hover:bg-gray-100 dark:hover:bg-gray-800 transition-all duration-200'
                   aria-label={currentTheme === 'light' ? "Switch to dark mode" : "Switch to light mode"}
                 >
                   {currentTheme === 'light' ? (
-                    <FiMoon aria-hidden="true" className="text-gray-700" />
+                    <FiMoon className="text-gray-700 w-5 h-5" />
                   ) : (
-                    <FiSun aria-hidden="true" className="text-yellow-400" />
+                    <FiSun className="text-yellow-400 w-5 h-5" />
                   )}
                 </button>
               </li>
@@ -95,7 +95,14 @@ function Header() {
                   <li key={item.slug} role="none">
                     <NavLink
                       to={item.slug}
-                      className='hover:text-blue-900 dark:hover:text-blue-300 cursor-pointer text-black dark:text-white'
+                      className={({ isActive, isPending }) =>
+                        `relative px-3 py-2 text-gray-700 dark:text-gray-200 hover:text-blue-600 dark:hover:text-blue-400 transition-colors duration-200
+                        ${isActive ? 'text-blue-600 dark:text-blue-400 font-medium' : ''}
+                        ${isPending ? 'opacity-70' : ''}
+                        after:content-[''] after:absolute after:bottom-0 after:left-0 after:w-full after:h-0.5 after:bg-blue-600 dark:after:bg-blue-400
+                        after:transform after:scale-x-0 after:origin-left after:transition-transform after:duration-200
+                        hover:after:scale-x-100 ${isActive ? 'after:scale-x-100' : ''}`
+                      }
                       role="menuitem"
                       aria-label={item.name}
                     >
@@ -106,21 +113,21 @@ function Header() {
               )}
               {authStatus && (
                 <>
-                  <li role="none" className="flex items-center gap-2">
+                  <li role="none" className="flex items-center">
                     <Link
                       to={`/profile/${userData?.$id}`}
-                      className="flex items-center gap-2 hover:text-blue-900 dark:hover:text-blue-300 cursor-pointer text-black dark:text-white"
+                      className="flex items-center gap-2 px-3 py-2 text-gray-700 dark:text-gray-200 hover:text-blue-600 dark:hover:text-blue-400 transition-colors duration-200"
                     >
-                      <FiUser className="text-xl" />
-                      <span>{userData?.name || 'Profile'}</span>
+                      <FiUser className="w-5 h-5" />
+                      <span className="font-medium">{userData?.name || 'Profile'}</span>
                     </Link>
                   </li>
                   <li role="none">
                     <LogoutBtn
                       type="button"
-                      bgColor="bg-blue-600"
+                      bgColor="bg-blue-600 hover:bg-blue-700"
                       textColor="text-white"
-                      className="hover:bg-blue-400 cursor-pointer dark:bg-gray-700 dark:hover:bg-gray-600"
+                      className="px-4 py-2 rounded-lg transition-colors duration-200 dark:bg-blue-500 dark:hover:bg-blue-600"
                     />
                   </li>
                 </>
@@ -134,66 +141,66 @@ function Header() {
       {menuOpen && (
         <nav
           id="mobile-menu"
-          className='md:hidden px-4 pb-4 dark:bg-gray-900'
+          className='md:hidden px-4 pb-4 bg-white dark:bg-gray-900 shadow-lg animate-slideDown'
           role="navigation"
           aria-label="Mobile navigation"
         >
-          <ul className='flex flex-col gap-2 text-xl' role="menu">
-            <li role="none">
-              <NavLink to="/" className='hover:text-blue-900 dark:hover:text-blue-300 cursor-pointer dark:text-white' role="menuitem">Home</NavLink>
-            </li>
+          <ul className='flex flex-col gap-3 text-lg' role="menu">
+            {navItems.map((item) =>
+              item.active ? (
+                <li key={item.slug} role="none">
+                  <NavLink
+                    to={item.slug}
+                    className={({ isActive, isPending }) =>
+                      `block px-4 py-2 rounded-lg text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors duration-200
+                      ${isActive ? 'bg-blue-50 dark:bg-blue-900/20 text-blue-600 dark:text-blue-400 font-medium' : ''}
+                      ${isPending ? 'opacity-70' : ''}`
+                    }
+                    role="menuitem"
+                    onClick={() => setMenuOpen(false)}
+                  >
+                    {item.name}
+                  </NavLink>
+                </li>
+              ) : null
+            )}
           </ul>
 
-          <div className='flex flex-col gap-4 mt-4'>
-            <ul className='flex flex-col gap-2 text-xl' role="list">
-              <li>
-                <button
-                  onClick={handleThemeToggle}
-                  className='hover:bg-black hover:text-white dark:hover:bg-white dark:hover:text-black rounded p-3 transition-colors duration-200'
-                  aria-label={currentTheme === 'light' ? "Switch to dark mode" : "Switch to light mode"}
+          <div className='flex flex-col gap-4 mt-4 pt-4 border-t border-gray-200 dark:border-gray-700'>
+            <div className='flex items-center justify-between px-4'>
+              <button
+                onClick={handleThemeToggle}
+                className='p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors duration-200'
+                aria-label={currentTheme === 'light' ? "Switch to dark mode" : "Switch to light mode"}
+              >
+                {currentTheme === 'light' ? (
+                  <FiMoon className="text-gray-700 w-5 h-5" />
+                ) : (
+                  <FiSun className="text-yellow-400 w-5 h-5" />
+                )}
+              </button>
+            </div>
+            
+            {authStatus && (
+              <div className='flex flex-col gap-3'>
+                <Link
+                  to={`/profile/${userData?.$id}`}
+                  className="flex items-center gap-2 px-4 py-2 text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-lg transition-colors duration-200"
+                  onClick={() => setMenuOpen(false)}
                 >
-                  {currentTheme === 'light' ? (
-                    <FiMoon aria-hidden="true" className="text-gray-700" />
-                  ) : (
-                    <FiSun aria-hidden="true" className="text-yellow-400" />
-                  )}
-                </button>
-              </li>
-              {navItems.map((item) =>
-                item.active ? (
-                  <li key={item.slug} role="none">
-                    <NavLink
-                      to={item.slug}
-                      className='hover:text-blue-900 dark:hover:text-blue-300 cursor-pointer text-black dark:text-white'
-                      role="menuitem"
-                    >
-                      {item.name}
-                    </NavLink>
-                  </li>
-                ) : null
-              )}
-              {authStatus && (
-                <>
-                  <li role="none">
-                    <Link
-                      to={`/profile/${userData?.$id}`}
-                      className="flex items-center gap-2 hover:text-blue-900 dark:hover:text-blue-300 cursor-pointer text-black dark:text-white"
-                    >
-                      <FiUser className="text-xl" />
-                      <span>{userData?.name || 'Profile'}</span>
-                    </Link>
-                  </li>
-                  <li role="none">
-                    <LogoutBtn
-                      type="button"
-                      bgColor="bg-blue-600"
-                      textColor="text-white"
-                      className="hover:bg-blue-400 cursor-pointer dark:bg-gray-700 dark:hover:bg-gray-600"
-                    />
-                  </li>
-                </>
-              )}
-            </ul>
+                  <FiUser className="w-5 h-5" />
+                  <span className="font-medium">{userData?.name || 'Profile'}</span>
+                </Link>
+                <div className="px-4">
+                  <LogoutBtn
+                    type="button"
+                    bgColor="bg-blue-600 hover:bg-blue-700"
+                    textColor="text-white"
+                    className="w-full px-4 py-2 rounded-lg transition-colors duration-200 dark:bg-blue-500 dark:hover:bg-blue-600"
+                  />
+                </div>
+              </div>
+            )}
           </div>
         </nav>
       )}
